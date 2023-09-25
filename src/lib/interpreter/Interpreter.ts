@@ -57,7 +57,7 @@ function GetClosingParenthesisIndex(tokens: string[]) {
 }
 
 function validate(expression: string, tokens: string[]) {
-  const rgx = /^(\+|-|\*|\/|\(|\)|\^|\.|,|\d)+(\d|\))+$/;
+  const rgx = /^(\+|-|\*|\/|\(|\)|\^|\.|,|\d)*(\d|\))+$/;
   if (!rgx.test(expression)) throw new Error("Invalid expression");
 
   // Validate if there are repeated operators and treat exceptions

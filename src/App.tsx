@@ -18,7 +18,8 @@ const App = () => {
       const res = interpret(expression);
       setResult(res.res);
     } catch (e) {
-      setError(true);
+      if (expression.length !== 0)
+        setError(true);
     }
   }, [expression]);
 
