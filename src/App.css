@@ -1,0 +1,43 @@
+#root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+main {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  max-width: 575px;
+}
+
+img {
+  max-width: 165px;
+  margin-bottom: 50px;
+}
+
+.resultDiv {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: right;
+  font-size: 20px;
+  color: var(--color-accent);
+  font-family: "Paprika", "Open Sans", Arial, Helvetica, sans-serif;
+  position: relative;
+}
+
+.resultDiv span {
+  position: absolute;
+}
+
+.resultDiv.error {
+  color: var(--color-error);
+  font-size: 12px;
+}

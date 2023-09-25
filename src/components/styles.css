@@ -1,0 +1,36 @@
+.mainDiv {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 30px;
+  padding: 0 10px;
+  border-bottom: 2px solid var(--color-accent);
+}
+
+input {
+  width: 100%;
+  outline: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 16px;
+}
+
+.iconDiv {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-accent);
+  border-radius: 3px;
+}
+
+.iconDiv.error {
+  background-color: var(--color-error);
+}
+
+.iconDiv .icon {
+  color: white;
+  width: 10px;
+}
