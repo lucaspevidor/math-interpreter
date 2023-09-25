@@ -6,80 +6,38 @@ function tokenize(expression: string) {
   const tokens = expression
     .split(/(\+|-|\*|\/|\(|\)|\^)/)
     .filter((token) => !["", " "].includes(token))
-    .map((token) => token.replace(",", ".").trim());
+    .map((token) => token.replace(",", "."));
 
+  // detect unary - token
   for (let i = 0; i < tokens.length; i++) {
     if (
       tokens[i] === "-" &&
-      !(
-        i > 1 &&
-        tokens.length >= i + 2 &&
-        tokens[i - 2] === "(" &&
-        tokens[i - 1] === "0" &&
-        tokens[i + 1] === "1" &&
-        tokens[i + 2] === ")"
-      )
+      (i === 0 || IsBinaryOperator(tokens[i - 1]))
     ) {
-      if (i > 1 && !IsOperator(tokens[i - 1])) tokens.splice(i++, 0, "+");
-      tokens.splice(i++, 0, "(");
-      tokens.splice(i++, 0, "0");
-      i++;
-      tokens.splice(i++, 0, "1");
-      tokens.splice(i++, 0, ")");
-      tokens.splice(i++, 0, "*");
-    } else if (
+      tokens[i] = "um";
+    }
+  }
+
+  for (let i = 0; i < tokens.length; i++) {
+    if (
       i > 0 &&
       tokens[i] === "(" &&
-      (!IsOperator(tokens[i - 1]) || tokens[i - 1] === ")")
+      (!IsBinaryOperator(tokens[i - 1]) || tokens[i - 1] === ")")
     ) {
-      tokens.splice(i, 0, "*");
-      i++;
-    } else if (
+      tokens.splice(i++, 0, "*");
+    }
+
+    else if (
       i !== tokens.length - 1 &&
       tokens[i] === ")" &&
-      !IsOperator(tokens[i + 1])
+      !IsBinaryOperator(tokens[i + 1])
     ) {
       tokens.splice(i + 1, 0, "*");
-      i++;
-    } else if (
-      (i === 0 && tokens[i] === "-") ||
-      (i > 0 && tokens[i] === "-" && tokens[i - 1] === "(")
-    ) {
-      tokens.splice(i, 0, "0");
       i++;
     }
   }
 
   return tokens;
-}
-
-function retokenize(tokens: string[]) {
-  const newTokens = [];
-  for (let i = 0; i < tokens.length; i++) {
-    if (tokens[i] === "(") {
-      const closingParen = GetClosingParenthesisIndex(tokens.slice(i));
-      if (!closingParen)
-        throw new Error(
-          "[Retokenize]Invalid expression (missing closing parenthesis)"
-        );
-
-      newTokens.push(
-        tokens.slice(i, i + closingParen).reduce((acc, v) => acc + v)
-      );
-      i += closingParen - 1;
-      continue;
-    } else if (
-      tokens[i].length > 1 &&
-      tokens.length === 1 &&
-      tokens[i].startsWith("(") &&
-      tokens[i].endsWith(")")
-    ) {
-      return retokenize(tokenize(tokens[i]).slice(1, -1));
-    }
-    newTokens.push(tokens[i]);
-  }
-
-  return newTokens;
 }
 
 function GetClosingParenthesisIndex(tokens: string[]) {
@@ -99,16 +57,20 @@ function GetClosingParenthesisIndex(tokens: string[]) {
 }
 
 function validate(expression: string, tokens: string[]) {
-  const rgx = /^(\+|-|\*|\/|\(|\)|\^|\.|,|\d|-\d)+$/;
+  const rgx = /^(\+|-|\*|\/|\(|\)|\^|\.|,|\d)+(\d|\))+$/;
   if (!rgx.test(expression)) throw new Error("Invalid expression");
 
   // Validate if there are repeated operators and treat exceptions
   for (let i = 0; i < tokens.length - 1; i++) {
-    if (IsOperator(tokens[i]) && IsOperator(tokens[i + 1])) {
+    if (
+      IsBinaryOperator(tokens[i]) && IsBinaryOperator(tokens[i + 1]) ||
+      (IsUnaryOperator(tokens[i]) && IsUnaryOperator(tokens[i + 1])) ||
+      (IsUnaryOperator(tokens[i]) && IsBinaryOperator(tokens[i + 1]))
+    ) {
       if (tokens[i + 1] === "(") continue;
       if (tokens[i] === ")") continue;
 
-      throw new Error("Invalid expression");
+      throw Error("Invalid expression");
     }
   }
 
@@ -121,7 +83,7 @@ function validate(expression: string, tokens: string[]) {
   if (p !== 0) throw new Error("Invalid expression");
 
   const lastItem = tokens[tokens.length - 1];
-  if (IsOperator(lastItem) && lastItem !== ")")
+  if (IsBinaryOperator(lastItem) && lastItem !== ")")
     throw new Error("Invalid expression");
 }
 
@@ -133,14 +95,23 @@ export interface TreeNode {
 }
 
 function buildTree(tokens: string[]): TreeNode {
-  const precedence = ["-", "+", "*", "/", "^"];
-  const retokens = retokenize(tokens);
+  const precedence = ["+", "-", "um", "*", "/", "^"];
+
+  if (tokens[0] === "(" && GetClosingParenthesisIndex(tokens) === tokens.length)
+    tokens = tokens.slice(1, -1);
 
   for (let i = 0; i < precedence.length; i++) {
-    for (let k = retokens.length - 1; k >= 0; k--) {
-      if (retokens[k] === precedence[i]) {
-        const childrenLeft = buildTree(retokens.slice(0, k));
-        const childrenRight = buildTree(retokens.slice(k + 1));
+    for (let k = 0; k < tokens.length; k++) {
+      if (tokens[k] === "(") {
+        const closeP = GetClosingParenthesisIndex(tokens.slice(k));
+        if (!closeP) throw Error("Invalid expression");
+
+        k += closeP;
+      }
+
+      if (tokens[k] === precedence[i]) {
+        const childrenLeft = buildTree(tokens.slice(0, k));
+        const childrenRight = buildTree(tokens.slice(k + 1));
         return {
           type: "operator",
           operator: precedence[i],
@@ -152,14 +123,16 @@ function buildTree(tokens: string[]): TreeNode {
 
   return {
     type: "number",
-    value: retokens[0],
+    value: tokens[0],
   };
 }
 
 function solveTree(node: TreeNode): number {
+
+
   if (node.type === "number") {
     if (!node.value) {
-      throw new Error("[Solve tree]Invalid number node");
+      return 0;
     }
 
     return Number.parseFloat(node.value);
@@ -187,6 +160,8 @@ function solveTree(node: TreeNode): number {
       return v1 / v2;
     case "^":
       return v1 ** v2;
+    case "um":
+      return -1 * v2;
     default:
       throw new Error("[Solve tree]Invalid operator");
   }
@@ -196,15 +171,15 @@ export function interpret(expression: string) {
   const filteredExp = filter(expression);
   const tokens = tokenize(filteredExp);
   validate(filteredExp, tokens);
-  const retokens = retokenize(tokens);
-  console.log({ retokens });
-
-  const tree = buildTree(retokens);
+  const tree = buildTree(tokens);
   const res = solveTree(tree);
-
   return { res, tree };
 }
 
-function IsOperator(token: string) {
+function IsBinaryOperator(token: string) {
   return ["+", "-", "*", "/", "(", ")", "^"].includes(token);
+}
+
+function IsUnaryOperator(token: string) {
+  return ["um"].includes(token)
 }
