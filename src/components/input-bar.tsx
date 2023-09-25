@@ -1,6 +1,7 @@
 import { Equal, X } from "lucide-react"
 
 import "./styles.css";
+import { useState } from "react";
 
 const InputBar = ({ exp: { expression, setExpression }, error }: {
   exp: {
@@ -9,20 +10,27 @@ const InputBar = ({ exp: { expression, setExpression }, error }: {
   },
   error: boolean
 }) => {
+  const [inputFocused, setInputFocused] = useState(false);
+
   return (
-    <div className="mainDiv">
+    <div className={
+      "mainDiv" +
+      (inputFocused ? " focused" : "")
+    }>
       <input
         type="text"
         placeholder="32 * 4(5-2)^2"
         value={expression}
+        onFocus={() => setInputFocused(true)}
+        onBlur={() => setInputFocused(false)}
         onChange={e => setExpression(e.target.value)}
       />
       <div className={
         "iconDiv" +
-        (error ? " error" : "")
+        (error && expression.length !== 0 ? " error" : "")
       }>
         {
-          error ?
+          error && expression.length !== 0 ?
             <X className="icon" strokeWidth={3} /> :
             <Equal className="icon" strokeWidth={3} />
         }

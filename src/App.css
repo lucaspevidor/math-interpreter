@@ -14,11 +14,55 @@ main {
   justify-content: center;
   gap: 15px;
   max-width: 575px;
+  position: relative;
+}
+
+.githubLink {
+  width: 28px;
+  height: 28px;
+  background-color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: white;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  transform: scale(0);
+  transition: 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation: PopOut 0.3s cubic-bezier(.33, .55, .58, 1.5) 2.5s forwards;
+}
+
+.githubLink:hover {
+  opacity: 0.5;
+}
+
+.githubLink a {
+  color: white;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main>div {
+  width: 100%;
 }
 
 img {
   max-width: 165px;
   margin-bottom: 50px;
+  transform: translateY(50px);
+  opacity: 0;
+  animation: ShowAndPopUp 2s ease-in-out forwards;
+}
+
+.inputBar {
+  transform: translateY(20px);
+  opacity: 0;
+  animation: PopUp 0.4s ease-out 1.9s forwards;
 }
 
 .resultDiv {
@@ -40,4 +84,48 @@ img {
 .resultDiv.error {
   color: var(--color-error);
   font-size: 12px;
+}
+
+@keyframes PopOut {
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes PopUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes ShowAndPopUp {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translateY(50px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(50px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

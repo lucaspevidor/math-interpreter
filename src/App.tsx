@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import InputBar from "./components/input-bar";
+import { Github } from "lucide-react";
 
 import { interpret } from "./lib/interpreter/Interpreter"
-
 import Logo from "./assets/Logo.svg";
+
 import "./App.css";
 
 const App = () => {
@@ -24,16 +25,25 @@ const App = () => {
   return (
     <main>
       <img src={Logo} alt="Logo" />
-      <InputBar exp={{ expression, setExpression }} error={error} />
+      <div className="inputBar">
+        <InputBar exp={{ expression, setExpression }} error={error} />
+      </div>
       <div className={
         "resultDiv" +
         (error ? " error" : "")
       }>
         <span>{
-          error ?
-            "Invalid expression" :
-            `= ${result}`
+          expression.length === 0 ?
+            "" :
+            error ?
+              "Invalid expression" :
+              `= ${result}`
         }</span>
+      </div>
+      <div className="githubLink">
+        <a href="https://github.com/lucaspevidor" target="_blank" rel="noopener noreferrer">
+          <Github size={16} />
+        </a>
       </div>
     </main>
   );

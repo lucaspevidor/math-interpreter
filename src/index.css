@@ -1,6 +1,7 @@
 :root {
   /* Variables */
   --bg-main: #fff;
+  --color-neutral: #dddde2;
   --color-primary: #212121;
   --color-accent: #1361D6;
   --color-error: #EE0000;
@@ -37,6 +38,7 @@ main {
 @media (prefers-color-scheme: dark) {
   :root {
     --bg-main: #222226;
+    --color-neutral: #333342;
     --color-primary: #fefefe;
     --color-accent: #1361D6;
     --color-error: #EE0000;
