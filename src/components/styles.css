@@ -24,6 +24,31 @@ input {
   align-items: center;
   background-color: var(--color-accent);
   border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1) 0.1s;
+}
+
+@keyframes popOut {
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+.iconDiv.error::before {
+  display: block;
+  position: absolute;
+  content: "";
+  width: 150%;
+  height: 150%;
+  border-radius: 100%;
+  background-color: red;
+  transform: scale(0);
+  animation: popOut 2s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
 }
 
 .iconDiv.error {
@@ -33,4 +58,5 @@ input {
 .iconDiv .icon {
   color: white;
   width: 10px;
+  z-index: 50;
 }
