@@ -3,6 +3,8 @@
 ## Overview
 The Math Interpreter is a simple yet powerful tool designed to solve math expressions, whether you need to perform basic arithmetic or more complex calculations.
 
+https://github.com/lucaspevidor/math-interpreter/assets/43662130/51b0d611-8885-42ab-aa99-5bba0ed76793
+
 ## Features
 - **Math Expression Solver:** It's dedicated to solving math expressions, making it a handy utility for a wide range of mathematical operations.
 - **Built with React, Vite, and Typescript:** Leveraging these technologies ensures a smooth and responsive user experience.
