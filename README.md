@@ -1,31 +1,36 @@
-# Simple Math Interpreter
+# Math Interpreter
 
-This is an app to interpret simple math functions and output its results.
+## Overview
+The Math Interpreter is a simple yet powerful tool designed to solve math expressions, whether you need to perform basic arithmetic or more complex calculations.
 
-# React + TypeScript + Vite
+## Features
+- **Math Expression Solver:** It's dedicated to solving math expressions, making it a handy utility for a wide range of mathematical operations.
+- **Built with React, Vite, and Typescript:** Leveraging these technologies ensures a smooth and responsive user experience.
+- **Custom AST Algorithm:** The project incorporates a custom Abstract Syntax Tree (AST) algorithm for parsing and solving expressions efficiently.
+- **Operator Support:** It supports the following operators: `+`, `-`, `*`, `/`, `^`, `(`, and `)`.
+- **UI and Animations:** The project doesn't rely on UI or CSS libraries; instead, it uses pure CSS for styling.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Getting Started
+To get started with the Math Interpreter, follow these steps:
 
-Currently, two official plugins are available:
+1. Clone this repository:
+   ```shell
+   git clone https://github.com/lucaspevidor/math-interpreter.git
+   cd math-interpreter
+   ```
+2. Install project dependencies:
+   ```shell
+   npm install
+   ```
+3. Start the development server
+   ```shell
+   npm run dev
+   ```
+4. Open the application at http://localhost:5173 in your web browser.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## License
+This project is licensed under the GNU General Public License, version 3 (GPL-3.0). See the [LICENSE](LICENSE) file for more details.
 
-## Expanding the ESLint configuration
+<hr>
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Now you're all set to explore and use the Math Interpreter for solving math expressions. Happy coding!
